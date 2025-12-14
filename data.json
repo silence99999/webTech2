@@ -1,0 +1,16 @@
+[
+  {
+    "id": 1,
+    "product_name": "laptop",
+    "store_name": "DNS",
+    "store_id": 1,
+    "model": "lenovo LOQ15"
+  },
+  {
+    "id": 2,
+    "product_name": "keyboard",
+    "store_name": "DNS",
+    "store_id": 2,
+    "model": "madlions MAD60HE"
+  }
+]
