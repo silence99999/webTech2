@@ -1,5 +1,6 @@
 const express = require('express')
 const fs = require('fs')
+const {response} = require("express");
 
 const app = express()
 const PORT = 3000
@@ -11,9 +12,9 @@ app.get('/',(req,res) => {
 })
 
 app.get('/hello',(req,res)=> {
-    res.send({
-        message:"Hello from server"
-    })
+    res.json({
+            message:"Hello from server"
+        })
 })
 
 app.get('/time',(req,res)=>{
@@ -27,20 +28,7 @@ app.get('/status',(req,res)=>{
 })
 
 app.get('/items',(req,res)=>{
-    fs.readFile("data.json",'utf-8',(err,data)=>{
-        if (err) {
-            return res.status(500).send("error reading file")
-        }
-
-        try {
-            const items = JSON.parse(data)
-
-            res.status(200).json(items)
-        } catch (parseError) {
-            console.error("error json parsing",parseError)
-            return res.status(500).send("data file corrupted")
-        }
-    })
+    res.json(readData())
 })
 
 app.post('/items',(req,res) =>{
@@ -166,6 +154,33 @@ app.delete('/item/:id',(req,res)=> {
         message:"Item deleted successfully",
         item:deletedItem
     })
+})
+
+
+app.get("/item/:id",(req,res) => {
+    const id = Number(req.params.id)
+
+    let items
+    let item
+    try {
+        items = readData()
+    } catch (err) {
+        res.status(500).send(err)
+    }
+
+    for (let i = 0;i < items.length;i++) {
+        if (items[i].id === id) {
+           item = items[i]
+           break
+        }
+    }
+
+    if (item === undefined) {
+        res.send("there is no item with this id")
+    }
+
+    res.status(200).json(item)
+
 })
 
 function readData() {
