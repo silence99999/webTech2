@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>Weather & News App</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f2f2f2;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 500px;
+            margin: auto;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+        }
+
+        input, button {
+            width: 100%;
+
+            padding: 10px;
+            margin-bottom: 10px;
+            font-size: 16px;
+        }
+
+        input {
+            width: 95%;
+        }
+
+        button {
+            cursor: pointer;
+        }
+
+        .card {
+            margin-top: 15px;
+            padding: 15px;
+            background: #fafafa;
+            border-radius: 8px;
+        }
+
+        .title {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>🌤 Weather & Air Quality</h2>
+
+    <input id="cityInput" placeholder="Enter city (e.g. Astana)" />
+    <button onclick="getWeather()">Get Data</button>
+
+    <div id="output"></div>
+</div>
+
+<script>
+    async function getWeather() {
+        const city = document.getElementById("cityInput").value || "Astana";
+        const output = document.getElementById("output");
+
+        output.innerHTML = "Loading...";
+
+        try {
+            const response = await fetch(`/weather?city=${encodeURIComponent(city)}`);
+            const data = await response.json();
+
+            if (data.error) {
+                output.innerHTML = `<p>Error: ${data.error}</p>`;
+                return;
+            }
+
+            output.innerHTML = `
+        <div class="card">
+          <div class="title">📍 Location</div>
+          ${data.country} (${data.coordinates.lat}, ${data.coordinates.lon})
+        </div>
+
+        <div class="card">
+          <div class="title">🌡 Weather</div>
+          Temperature: ${data.temperature} °C <br>
+          Feels like: ${data.feels_like} °C <br>
+          Description: ${data.descriptionWeather} <br>
+          Wind: ${data.wind_speed} m/s <br>
+          Rain (3h): ${data.rain_3h} mm
+        </div>
+
+        <div class="card">
+          <div class="title">🌫 Air Quality</div>
+          AQI: ${data.air_quality} <br>
+          CO: ${data.CO_concentration} <br>
+          Updated: ${data.dateTime}
+        </div>
+
+        <div class="card">
+          <div class="title">📰 Latest News</div>
+          <strong>${data.dateNews}</strong><br>
+          ${data.description}
+        </div>
+      `;
+        } catch (err) {
+            output.innerHTML = "Failed to fetch data";
+        }
+    }
+</script>
+
+</body>
+</html>
