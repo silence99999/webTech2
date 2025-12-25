@@ -55,7 +55,7 @@ Before running this application, ensure you have:
 
 4. **Start the server**
    ```bash
-   node server.js
+   node assignment2/index.js
    ```
 
 5. **Access the application**
