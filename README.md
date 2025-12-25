@@ -1,258 +1,137 @@
-# Express Items API
+# Weather & News Application
 
-A simple RESTful API built with Express.js for managing items stored in a JSON file. This API provides CRUD (Create, Read, Update, Delete) operations for product items.
+A full-stack web application that provides real-time weather information, air quality data, and latest news based on city location.
 
-## Project Description
+## Features
 
-This is a Node.js Express server that manages a collection of items with properties like product name, store name, and model. The data is persisted in a `data.json` file on the server's filesystem. The API provides endpoints for retrieving, creating, updating, and deleting items.
+- 🌤 **Real-time Weather Data**: Temperature, feels-like temperature, weather description, wind speed, and rain volume
+- 🌫 **Air Quality Monitoring**: AQI levels and CO concentration
+- 📰 **Latest News**: Location-based news in the local language
+- 🗺 **Geographic Information**: Coordinates and country information
+- 📱 **Responsive Design**: Works seamlessly across different devices
+
+## Technologies Used
+
+### Backend
+- **Node.js** with Express.js
+- **OpenWeather API** - Weather and air quality data
+- **NewsData.io API** - Latest news articles
+- **REST Countries API** - Country information and language detection
+
+### Frontend
+- HTML5
+- CSS3
+- Vanilla JavaScript (Fetch API)
 
 ## Prerequisites
 
-- Node.js (version 12 or higher)
+Before running this application, ensure you have:
+
+- Node.js (v14 or higher)
 - npm (Node Package Manager)
+- API Keys from:
+  - [OpenWeather API](https://openweathermap.org/api)
+  - [NewsData.io](https://newsdata.io/)
 
 ## Installation
 
-1. Clone or download this project to your local machine
-```bash
-git clone https://github.com/silence99999/webTech2 
-```    
+1. **Clone the repository**
+   ```bash
+   git clone "https://github.com/silence99999/webTech2"
+   ```
 
-2. Install dependencies:
-```bash
-npm install express
+2. **Install dependencies**
+   ```bash
+   npm install
+   ```
+
+3. **Create environment file**
+
+   Create a `.env` file in the root directory:
+   ```
+   API_KEY_WEATHER=your_openweather_api_key
+   API_KEY_NEWS=your_newsdata_api_key
+   ```
+
+4. **Start the server**
+   ```bash
+   node server.js
+   ```
+
+5. **Access the application**
+
+   Open your browser and navigate to: `http://localhost:3030`
+
+## API Endpoints
+
+### GET /weather
+Retrieves weather, air quality, and news data for a specified city.
+
+**Query Parameters:**
+- `city` (optional): City name (default: "Astana")
+
+**Example Request:**
+```
+GET http://localhost:3030/weather?city=London
 ```
 
-3. Create a `data.json` file in the root directory with the following initial content:
-```json
-[]
+**Example Response:**
+![img.png](img.png)
 ```
 
-Or with sample data:
-```json
-[
-  {
-    "id": 1,
-    "product_name": "iPhone 14",
-    "store_name": "Apple Store",
-    "store_id": 1,
-    "model": "A2632"
-  }
-]
+## Project Structure
+
 ```
+assignment2/
+├── server.js              # Express server and API logic
+├── public/
+│   └── index.html        # Frontend interface
+├── .env                  # Environment variables (not in repo)
+├── package.json          # Dependencies
+└── README.md            # Documentation
 
-## How to Run the Server
 
-Start the server with:
-```bash
-node app.js
-```
+## Key Design Decisions
 
-Or if you have nodemon installed:
-```bash
-nodemon app.js
-```
+### 1. Server-Side API Integration
+All third-party API calls are handled on the backend to:
+- Protect API keys from exposure
+- Reduce client-side complexity
+- Enable data processing and aggregation
+- Improve security and performance
 
-The server will start on port 3000. You should see:
-```
-Server listening on port 3000
-Access it at: http://localhost:3000
-```
+### 2. Multi-API Data Aggregation
+The application intelligently combines data from multiple sources:
+- **OpenWeather API**: Weather and air quality data using coordinates
+- **REST Countries API**: Automatic language detection for news localization
+- **NewsData.io**: Localized news based on country and language
 
-## API Routes
+### 3. Air Quality Index Mapping
+AQI values are converted from numeric (1-5) to descriptive labels:
+- 1 → Good
+- 2 → Fair
+- 3 → Moderate
+- 4 → Poor
+- 5 → Very Poor
 
-### 1. GET `/`
-**Description:** Check if server is running
+### 4. Language Detection
+The app automatically detects the primary language of the searched country and fetches news in that language, with fallback to English.
 
-**Response:**
-```
-server is running
-```
+### 5. Error Handling
+Comprehensive try-catch blocks ensure graceful error handling and informative error messages to users.
 
----
+## Screenshots
 
-### 2. GET `/hello`
-**Description:** Test endpoint that returns a hello message
+### Main Interface
+![img_1.png](img_1.png)
 
-**Response:**
-```json
-{
-  "message": "Hello from server"
-}
-```
+*Screenshot showing weather data, air quality, and news for London*
 
----
+## Dependencies
 
-### 3. GET `/time`
-**Description:** Returns the current server time
-
-**Response:**
-```
-2024-01-15T10:30:00.000Z
-```
-
----
-
-### 4. GET `/status`
-**Description:** Returns a status message
-
-**Response:** (Status: 201)
-```json
-{
-  "message": "some text"
-}
-```
-
----
-
-### 5. GET `/items`
-**Description:** Retrieve all items from the database
-
-**Response:** (Status: 200)
-```json
-[
-  {
-    "id": 1,
-    "product_name": "iPhone 14",
-    "store_name": "Apple Store",
-    "store_id": 1,
-    "model": "A2632"
-  }
-]
-```
-
----
-
-### 6. POST `/items`
-**Description:** Create a new item
-
-**Request Body:**
 ```json
 {
-  "product_name": "Samsung Galaxy S23",
-  "store_name": "Samsung Store",
-  "model": "SM-S911"
+  "express": "^4.18.0",
+  "dotenv": "^16.0.0"
 }
 ```
-
-**Response:** (Status: 201)
-```json
-[
-  {
-    "id": 1,
-    "product_name": "iPhone 14",
-    "store_name": "Apple Store",
-    "store_id": 1,
-    "model": "A2632"
-  },
-  {
-    "id": 2,
-    "poduct_name": "Samsung Galaxy S23",
-    "store_name": "Samsung Store",
-    "store_id": 1,
-    "model": "SM-S911"
-  }
-]
-```
-
----
-
-### 7. PUT `/item/:id`
-**Description:** Update an existing item by ID
-
-**URL Parameters:**
-- `id` - The ID of the item to update
-
-**Request Body:** (all fields optional)
-```json
-{
-  "product_name": "iPhone 15",
-  "store_name": "Apple Store NYC",
-  "model": "A2846"
-}
-```
-
-**Response:** (Status: 200)
-```json
-{
-  "id": 1,
-  "product_name": "iPhone 15",
-  "store_name": "Apple Store NYC",
-  "store_id": 1,
-  "model": "A2846"
-}
-```
-
----
-
-### 8. DELETE `/item/:id`
-**Description:** Delete an item by ID
-
-**URL Parameters:**
-- `id` - The ID of the item to delete
-
-**Response:** (Status: 200)
-```json
-{
-  "message": "Item deleted successfully",
-  "item": {
-    "id": 1,
-    "product_name": "iPhone 14",
-    "store_name": "Apple Store",
-    "store_id": 1,
-    "model": "A2632"
-  }
-}
-```
-
-## Example Postman Requests
-
-### 1. Get All Items
-- **Method:** GET
-- **URL:** `http://localhost:3000/items`
-- **Headers:** None required
-
----
-
-### 2. Create New Item
-- **Method:** POST
-- **URL:** `http://localhost:3000/items`
-- **Headers:**
-    - `Content-Type: application/json`
-- **Body (raw JSON):**
-```json
-{
-  "product_name": "MacBook Pro",
-  "store_name": "Apple Store",
-  "model": "M3"
-}
-```
-
----
-
-### 3. Update Item
-- **Method:** PUT
-- **URL:** `http://localhost:3000/item/1`
-- **Headers:**
-    - `Content-Type: application/json`
-- **Body (raw JSON):**
-```json
-{
-  "product_name": "MacBook Pro 16",
-  "model": "M3 Pro"
-}
-```
-
----
-
-### 4. Delete Item
-- **Method:** DELETE
-- **URL:** `http://localhost:3000/item/1`
-
-
----
-
-### 5. Test Server Status
-- **Method:** GET
-- **URL:** `http://localhost:3000/`
-
