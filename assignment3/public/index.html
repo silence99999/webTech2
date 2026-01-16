@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Online Shop Products</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 900px; margin: 30px auto; padding: 0 16px; }
+        h1 { margin-bottom: 6px; }
+        form { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; padding: 12px; border: 1px solid #ddd; border-radius: 10px; }
+        form input { padding: 10px; }
+        form button { grid-column: 1 / -1; padding: 10px; cursor: pointer; }
+        .row { display: flex; gap: 10px; align-items: center; }
+        .msg { margin: 12px 0; }
+        table { width: 100%; border-collapse: collapse; margin-top: 14px; }
+        th, td { border: 1px solid #ddd; padding: 10px; text-align: left; }
+        th { background: #f6f6f6; }
+        code { background: #f3f3f3; padding: 2px 6px; border-radius: 6px; }
+    </style>
+</head>
+<body>
+<h1>Products</h1>
+<div class="row">
+    <button id="refreshBtn">Refresh list</button>
+    <span class="msg" id="msg"></span>
+</div>
+
+<h2>Add new product</h2>
+<form id="productForm">
+    <input name="name" placeholder="Name" required />
+    <input name="category" placeholder="Category" required />
+    <input name="brand" placeholder="Brand" required />
+    <input name="price" type="number" min="1" step="1" placeholder="Price" required />
+    <input name="stock_quantity" type="number" min="0" step="1" placeholder="Stock quantity" required />
+    <button type="submit">Create Product</button>
+</form>
+
+<h2>All products</h2>
+<table>
+    <thead>
+    <tr>
+        <th>_id</th>
+        <th>Name</th>
+        <th>Category</th>
+        <th>Brand</th>
+        <th>Price</th>
+        <th>Stock</th>
+        <th>Created</th>
+    </tr>
+    </thead>
+    <tbody id="productsBody"></tbody>
+</table>
+
+<script>
+    const API_BASE = "";
+    const msgEl = document.getElementById("msg");
+    const bodyEl = document.getElementById("productsBody");
+    const refreshBtn = document.getElementById("refreshBtn");
+    const form = document.getElementById("productForm");
+
+    function showMsg(text, isError = false) {
+        msgEl.textContent = text;
+        msgEl.style.color = isError ? "crimson" : "green";
+        if (!text) return;
+        setTimeout(() => { msgEl.textContent = ""; }, 3000);
+    }
+
+    async function loadProducts() {
+        bodyEl.innerHTML = "<tr><td colspan='7'>Loading...</td></tr>";
+        try {
+            const res = await fetch(`${API_BASE}/products`);
+            const data = await res.json();
+            if (!res.ok) throw new Error(data.message || "Failed to load products");
+
+            if (!Array.isArray(data) || data.length === 0) {
+                bodyEl.innerHTML = "<tr><td colspan='7'>No products yet.</td></tr>";
+                return;
+            }
+
+            bodyEl.innerHTML = data.map(p => `
+          <tr>
+            <td><code>${p._id}</code></td>
+            <td>${p.name}</td>
+            <td>${p.category}</td>
+            <td>${p.brand}</td>
+            <td>${p.price}</td>
+            <td>${p.stock_quantity}</td>
+            <td>${p.createdAt ? new Date(p.createdAt).toLocaleString() : ""}</td>
+          </tr>
+        `).join("");
+        } catch (err) {
+            bodyEl.innerHTML = "<tr><td colspan='7'>Error loading products.</td></tr>";
+            showMsg(err.message, true);
+        }
+    }
+
+    form.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const fd = new FormData(form);
+
+        const payload = {
+            name: fd.get("name"),
+            category: fd.get("category"),
+            brand: fd.get("brand"),
+            price: Number(fd.get("price")),
+            stock_quantity: Number(fd.get("stock_quantity"))
+        };
+
+        try {
+            const res = await fetch(`${API_BASE}/products`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(payload)
+            });
+
+            const data = await res.json();
+            if (!res.ok) throw new Error(data.message || "Create failed");
+
+            showMsg("Created!");
+            form.reset();
+            await loadProducts();
+        } catch (err) {
+            showMsg(err.message, true);
+        }
+    });
+
+    refreshBtn.addEventListener("click", loadProducts);
+    loadProducts();
+</script>
+</body>
+</html>
