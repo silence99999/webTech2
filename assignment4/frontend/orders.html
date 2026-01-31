@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Orders</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<script>
+  if (!localStorage.getItem("token")) {
+    window.location.href = "index.html";
+  }
+</script>
+
+<div class="container">
+
+  <nav>
+    <a href="products.html">Products</a> |
+    <a href="orders.html">Orders</a> |
+    <a href="#" onclick="logout()">Logout</a>
+  </nav>
+
+  <h2>Orders</h2>
+
+  <button onclick="loadOrders()">Load Orders</button>
+
+  <ul id="orders"></ul>
+  <div id="admin-analytics">
+    <h3>Analytics (Admin)</h3>
+    <button onclick="loadRevenue()">Revenue by Product</button>
+    <ul id="analytics"></ul>
+  </div>
+
+</div>
+<script>
+  const token = localStorage.getItem("token");
+
+  if (token) {
+    const payload = JSON.parse(atob(token.split(".")[1]));
+
+    if (payload.role !== "admin") {
+      document.getElementById("admin-analytics").style.display = "none";
+    }
+  }
+</script>
+
+
+<script src="app.js"></script>
+</body>
+</html>

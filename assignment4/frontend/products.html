@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Products</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<script>
+  if (!localStorage.getItem("token")) {
+    window.location.href = "index.html";
+  }
+</script>
+
+<div class="container">
+
+  <nav>
+    <a href="products.html">Products</a> |
+    <a href="orders.html">Orders</a> |
+    <a href="#" onclick="logout()">Logout</a>
+  </nav>
+
+  <h2>Products</h2>
+
+  <button onclick="loadProducts()">Load Products</button>
+
+  <ul id="products"></ul>
+  <button id="place-order-btn" onclick="placeOrder()">Place Order</button>
+
+  <div id="admin-panel">
+    <h3>Add Product (Admin)</h3>
+
+    <input id="name" placeholder="Name">
+    <input id="category" placeholder="Category">
+    <input id="brand" placeholder="Brand">
+    <input id="price" type="number" placeholder="Price">
+    <input id="stock" type="number" placeholder="Stock">
+
+    <button onclick="createProduct()">Create Product</button>
+  </div>
+
+</div>
+<script>
+  const token = localStorage.getItem("token");
+
+  if (token) {
+    const payload = JSON.parse(atob(token.split(".")[1]));
+
+    if (payload.role !== "admin") {
+      document.getElementById("admin-panel").style.display = "none";
+    }
+  }
+
+  const payload = JSON.parse(atob(token.split(".")[1]));
+
+  if (payload.role === "admin") {
+    document.getElementById("place-order-btn").style.display = "none";
+  }
+</script>
+
+
+
+<script src="app.js"></script>
+</body>
+</html>
