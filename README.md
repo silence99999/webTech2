@@ -154,8 +154,7 @@ CRUD functionality
 Postman Screenshots
 
 🔹 User Registration
-![img_8.png](img_8.png)
-![img_9.png](img_9.png)
+![img_18.png](img_18.png)
 🔹 User Login (JWT Token)
 ![img_10.png](img_10.png)
 🔹 Admin Creating Product (Allowed)
