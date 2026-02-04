@@ -1,5 +1,4 @@
 const Order = require("../models/Order");
-const {decode} = require("jsonwebtoken");
 
 exports.getAllOrders = async (req, res) => {
     res.json(await Order.find()
