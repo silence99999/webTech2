@@ -9,6 +9,7 @@ router.get("/:id", auth, controller.getOrderById);
 router.post("/", auth, role("admin"), controller.createOrder);
 router.put("/:id", auth, role("admin"), controller.updateOrder);
 router.delete("/:id", auth, role("admin"), controller.deleteOrder);
+router.patch("/:id/status", auth, controller.updateOrderStatusByUser);
 
 router.post("/:id/items", auth, role("admin"), controller.addItemToOrder);
 router.delete(
@@ -23,13 +24,6 @@ router.get(
     auth,
     role("admin"),
     controller.getRevenueByProduct
-);
-
-router.get(
-    "/analytics/orders-per-customer",
-    auth,
-    role("admin"),
-    controller.getOrdersPerCustomer
 );
 
 router.post("/place", auth, controller.placeOrder);
