@@ -1,4 +1,4 @@
-const API = "http://localhost:3000";
+const API = "";
 
 const email = document.getElementById("email");
 const password = document.getElementById("password");
