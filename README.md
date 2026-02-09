@@ -1,34 +1,20 @@
-# 🛒 Online Shop Web Application
-**Advanced Databases (NoSQL) – Endterm Project**
+
+# 🛒 Online Shop API
+
+## 📌 Project Overview
+
+This project is a **RESTful API for an Online Shop** built with **Node.js, Express, and MongoDB**, following the **MVC (Model–View–Controller)** architecture.
+
+The API implements:
+- Modular MVC project structure
+- JWT-based authentication
+- Password hashing using bcrypt
+- Role-Based Access Control (RBAC)
+- Full CRUD operations for multiple related objects
 
 ---
 
-## 1. Project Overview
-
-This project is a **web-based Online Shop application** developed as an endterm assessment for the course **Advanced Databases (NoSQL)**.
-
-The goal of the project is to demonstrate:
-- Advanced MongoDB data modeling
-- Use of aggregation pipelines
-- Implementation of RESTful APIs
-- Secure backend logic with authentication and authorization
-- Practical business-oriented database design
-
-The backend is implemented using **Node.js, Express, and MongoDB**, following **MVC architecture** and best practices for NoSQL systems.
-
----
-
-## 2. System Architecture
-
-The system follows a **client–server architecture**:
-
-- **Backend**: Node.js + Express
-- **Database**: MongoDB (NoSQL)
-- **Architecture Pattern**: MVC (Model–View–Controller)
-- **Authentication**: JWT + bcrypt
-- **Authorization**: Role-Based Access Control (RBAC)
-
-### Folder Structure
+## 🧱 Project Architecture (MVC)
 ```text
 config/ → Database configuration
 models/ → Mongoose schemas
@@ -37,52 +23,16 @@ routes/ → API endpoints
 middleware/ → Authentication & authorization
 server.js → Application entry point
 ```
-This structure ensures scalability, maintainability, and clear separation of concerns.
+
+This separation improves **maintainability, scalability, and security**.
 
 ---
 
-## 3. Database Design & Data Models
+## 🧩 Data Models (Objects)
 
-The database uses **multiple collections**, combining **embedded** and **referenced** documents.
+### 1️⃣ Product (Primary Object)
 
----
-
-### 3.1 User (Authentication Entity)
-
-Used for system access and security.
-
-**Fields:**
-- email (unique)
-- password (hashed with bcrypt)
-- role (`user`, `admin`)
-
-**Purpose:**
-- Authentication
-- Authorization
-- Role-based access control
-
-Passwords are never stored in plain text.
-
----
-
-### 3.2 Customer (Business Entity)
-
-Represents buyers in the online shop.
-
-**Fields:**
-- full_name
-- email
-- phone
-- address
-- user_id (optional reference to User)
-
-A customer may be linked to a user account, but guest customers are also supported.
-
----
-
-### 3.3 Product (Primary Object)
-
-Represents items available for sale.
+Represents items sold in the online shop.
 
 **Fields:**
 - name
@@ -91,124 +41,88 @@ Represents items available for sale.
 - price
 - stock_quantity
 
-**Indexing:**
-- Compound index on `category` and `price` for optimized product filtering.
+**Operations:**
+- Create (admin only)
+- Read (public)
+- Update (admin only)
+- Delete (admin only)
 
 ---
 
-### 3.4 Order (Secondary Object)
+### 2️⃣ Order (Secondary Object)
 
-Represents purchases made by customers.
+Represents a purchase made by a customer.
 
 **Fields:**
 - order_date
 - order_status
 - total_amount
 - customer_id (reference to Customer)
-- order_items (embedded array)
+- order_items (references Product)
 
-**Embedded Document (`order_items`):**
-- product_id (reference to Product)
-- quantity
-- unit_price
-
-**Indexing:**
-- Compound index on `customer_id` and `order_date` for optimized order history queries.
+Each order is linked to a customer and contains one or more products.
 
 ---
 
-## 4. MongoDB Features Used
+### 3️⃣ Customer (Business Entity)
 
-### 4.1 CRUD Operations
-- Full Create, Read, Update, Delete operations across all collections
-- CRUD implemented via RESTful API endpoints
+Represents a buyer in the system.
 
----
+**Fields:**
+- full_name
+- email
+- phone
+- address
+- user_id (optional reference to User)
 
-### 4.2 Advanced Update & Delete Operations
-
-The project uses MongoDB advanced operators:
-- `$push` – add items to an order
-- `$pull` – remove items from an order
-- `$inc` – update total order price
-- `$set` – update specific fields
-
-These operations reflect real business logic in an online shop.
+Customers are used for **orders and delivery information**.
 
 ---
 
-### 4.3 Aggregation Framework
+### 4️⃣ User (Authentication Entity)
 
-Multi-stage aggregation pipelines are implemented for analytics:
+Represents system accounts used for authentication and authorization.
 
-**Examples:**
-- Total revenue per product
-- Number of orders and total spending per customer
+**Fields:**
+- email
+- password (hashed)
+- role (`user` or `admin`)
 
-**Stages used:**
-- `$unwind`
-- `$group`
-- `$sum`
-- `$multiply`
-- `$sort`
-
-These aggregations provide meaningful business insights.
+Users are responsible for:
+- Logging in
+- Receiving JWT tokens
+- Access control (RBAC)
 
 ---
 
-### 4.4 Indexing & Optimization
-
-To improve performance:
-- Compound indexes are defined on frequently queried fields
-- Indexes optimize filtering and sorting operations
-- Index usage is justified based on real query patterns
-
----
-
-## 5. REST API Design
-
-The backend exposes a **RESTful API** following standard conventions.
-
-### API Characteristics:
-- Clear endpoint structure
-- Proper HTTP methods (GET, POST, PUT, DELETE)
-- JSON request/response format
-- Protected routes using JWT
-
-### Endpoint Coverage:
-- Authentication (register, login)
-- Products CRUD
-- Customers CRUD
-- Orders CRUD
-- Analytics endpoints (aggregation-based)
-
-The project includes **more than the minimum required number of endpoints**.
-
----
-
-## 6. Authentication & Authorization
+## 🔐 Authentication & Role-Based Access Control (RBAC)
 
 ### Authentication
-- Users log in with email and password
-- JWT tokens are issued upon successful login
-- Tokens are required for protected routes
+- Passwords are hashed using **bcrypt**
+- Users log in and receive a **JWT token**
+- JWT is required for protected routes
 
-### Authorization (RBAC)
-- **User**: read-only access
-- **Admin**: create, update, delete access
+### Roles
+- **User**
+    - Can log in
+    - Can access protected read routes
+- **Admin**
+    - Can create, update, and delete products, customers, and orders
+
+### Access Rules Summary
 
 | Action | User | Admin |
 |------|------|-------|
-GET (Read) | ✅ | ✅ |
-POST | ❌ | ✅ |
-PUT | ❌ | ✅ |
-DELETE | ❌ | ✅ |
+Read (GET) | ✅ | ✅ |
+Create (POST) | ❌ | ✅ |
+Update (PUT) | ❌ | ✅ |
+Delete (DELETE) | ❌ | ✅ |
 
 ---
 
-## 7. Environment Setup
+## ⚙️ Setup Instructions
 
-### 7.1 Install Dependencies
+### Install dependencies
 ```bash
 npm install
 ```
@@ -226,19 +140,29 @@ Server will run at:
 ```text
 http://localhost:3000
 ```
+## API Testing (Postman)
+All API endpoints were tested using Postman to verify:
 
-## Conclusion
+Authentication
 
-This project demonstrates advanced NoSQL concepts including:
+Authorization
 
-Proper MongoDB data modeling
+Role-based restrictions
 
-Aggregation pipelines with business meaning
+CRUD functionality
 
-Secure backend logic
+Postman Screenshots
 
-RESTful API design
-
-Performance optimization through indexing
-
-The backend is fully compliant with the course requirements and ready for frontend integration.
+🔹 User Registration
+![img_8.png](img_8.png)
+![img_9.png](img_9.png)
+🔹 User Login (JWT Token)
+![img_10.png](img_10.png)
+🔹 Admin Creating Product (Allowed)
+![img_12.png](img_12.png)
+🔹 User Creating Product (Forbidden)
+![img_16.png](img_16.png)
+🔹 Orders with Populated Data
+![img_11.png](img_11.png)
+🔹 Unauthorized Access (No Token)
+![img_17.png](img_17.png)
