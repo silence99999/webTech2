@@ -1,7 +1,7 @@
 
-# 🛒 Online Shop API
+# Online Shop API
 
-## 📌 Project Overview
+## Project Overview
 
 This project is a **RESTful API for an Online Shop** built with **Node.js, Express, and MongoDB**, following the **MVC (Model–View–Controller)** architecture.
 
@@ -14,7 +14,7 @@ The API implements:
 
 ---
 
-## 🧱 Project Architecture (MVC)
+## Project Architecture (MVC)
 ```text
 config/ → Database configuration
 models/ → Mongoose schemas
@@ -28,9 +28,9 @@ This separation improves **maintainability, scalability, and security**.
 
 ---
 
-## 🧩 Data Models (Objects)
+## Data Models (Objects)
 
-### 1️⃣ Product (Primary Object)
+### Product (Primary Object)
 
 Represents items sold in the online shop.
 
@@ -49,7 +49,7 @@ Represents items sold in the online shop.
 
 ---
 
-### 2️⃣ Order (Secondary Object)
+###  Order (Secondary Object)
 
 Represents a purchase made by a customer.
 
@@ -64,7 +64,7 @@ Each order is linked to a customer and contains one or more products.
 
 ---
 
-### 3️⃣ Customer (Business Entity)
+### Customer (Business Entity)
 
 Represents a buyer in the system.
 
@@ -79,7 +79,7 @@ Customers are used for **orders and delivery information**.
 
 ---
 
-### 4️⃣ User (Authentication Entity)
+### User (Authentication Entity)
 
 Represents system accounts used for authentication and authorization.
 
@@ -95,7 +95,7 @@ Users are responsible for:
 
 ---
 
-## 🔐 Authentication & Role-Based Access Control (RBAC)
+##  Authentication & Role-Based Access Control (RBAC)
 
 ### Authentication
 - Passwords are hashed using **bcrypt**
@@ -120,7 +120,7 @@ Delete (DELETE) | ❌ | ✅ |
 
 ---
 
-## ⚙️ Setup Instructions
+##  Setup Instructions
 
 ### Install dependencies
 ```bash
@@ -154,8 +154,7 @@ CRUD functionality
 Postman Screenshots
 
 🔹 User Registration
-![img_8.png](img_8.png)
-![img_9.png](img_9.png)
+![img_18.png](img_18.png)
 🔹 User Login (JWT Token)
 ![img_10.png](img_10.png)
 🔹 Admin Creating Product (Allowed)
