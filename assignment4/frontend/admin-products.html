@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Admin Products</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<script>
+  const token = localStorage.getItem("token");
+  if (!token) {
+    window.location.href = "index.html";
+  } else {
+    const payload = JSON.parse(atob(token.split(".")[1]));
+    if (payload.role !== "admin") {
+      window.location.href = "products.html";
+    }
+  }
+</script>
+
+<div class="page">
+  <section class="hero animate">
+    <h1>Admin Products</h1>
+    <p>Manage items, pricing, and stock without mixing with user views.</p>
+  </section>
+
+  <div class="container animate">
+    <div class="card-header">
+      <div>
+        <h2 class="title">Products</h2>
+        <p class="subtitle">Create, update, and remove items.</p>
+      </div>
+      <nav>
+        <a href="admin-dashboard.html">Dashboard</a>
+        <a href="admin-products.html">Admin Products</a>
+        <a href="orders.html">Admin Orders</a>
+        <a href="#" onclick="logout()">Logout</a>
+      </nav>
+    </div>
+
+    <div class="split single">
+      <div class="panel">
+        <div class="filters">
+          <div class="field">
+            <label for="product-search">Search</label>
+            <input id="product-search" placeholder="Search by name">
+          </div>
+          <div class="row">
+            <div class="field">
+              <label for="product-category">Category</label>
+              <input id="product-category" placeholder="Category">
+            </div>
+            <div class="field">
+              <label for="product-brand">Brand</label>
+              <input id="product-brand" placeholder="Brand">
+            </div>
+          </div>
+          <div class="row">
+            <div class="field">
+              <label for="product-sort">Sort</label>
+              <select id="product-sort">
+                <option value="createdAt-desc">Newest</option>
+                <option value="price-asc">Price: Low to High</option>
+                <option value="price-desc">Price: High to Low</option>
+                <option value="name-asc">Name: A-Z</option>
+                <option value="name-desc">Name: Z-A</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="product-instock">Stock</label>
+              <select id="product-instock">
+                <option value="">All</option>
+                <option value="1">In stock</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <ul id="products"></ul>
+        <div class="pagination" id="products-pagination"></div>
+      </div>
+
+      <div class="panel" id="admin-panel">
+        <h3 class="title">Add Product</h3>
+        <p class="subtitle">Create a new item with pricing and stock.</p>
+
+        <div class="form">
+          <div class="field">
+            <label for="name">Name</label>
+            <input id="name" placeholder="Midnight Blend Coffee">
+          </div>
+          <div class="row">
+            <div class="field">
+              <label for="category">Category</label>
+              <input id="category" placeholder="Beverages">
+            </div>
+            <div class="field">
+              <label for="brand">Brand</label>
+              <input id="brand" placeholder="Aether Supply">
+            </div>
+          </div>
+          <div class="row">
+            <div class="field">
+              <label for="price">Price</label>
+              <input id="price" type="number" placeholder="14.50">
+            </div>
+            <div class="field">
+              <label for="stock">Stock</label>
+              <input id="stock" type="number" placeholder="120">
+            </div>
+          </div>
+          <button onclick="createProduct()">Create Product</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>

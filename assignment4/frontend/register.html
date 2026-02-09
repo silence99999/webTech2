@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Register</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="page">
+  <section class="hero animate">
+    <h1>Create your account</h1>
+    <p>Get access to inventory, ordering, and admin analytics with a single login.</p>
+  </section>
+
+  <div class="container narrow animate">
+    <div class="card-header">
+      <div>
+        <h2 class="title">Register</h2>
+        <p class="subtitle">Set up your account in seconds.</p>
+      </div>
+      <span class="tag">New</span>
+    </div>
+
+    <div class="form">
+      <div class="field">
+        <label for="email">Email</label>
+        <input id="email" type="email" placeholder="you@company.com">
+      </div>
+      <div class="field">
+        <label for="password">Password</label>
+        <input id="password" type="password" placeholder="Create a strong password">
+      </div>
+      <button onclick="register()">Register</button>
+    </div>
+
+    <p id="msg"></p>
+
+    <p class="footer-link">
+      Already have an account?
+      <a href="index.html">Login</a>
+    </p>
+  </div>
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>

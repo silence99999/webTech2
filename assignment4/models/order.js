@@ -7,7 +7,7 @@ const orderSchema = new mongoose.Schema({
     user_id: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "User",
-        required:true
+        required: true
     },
     order_items: [
         {
@@ -20,5 +20,7 @@ const orderSchema = new mongoose.Schema({
         }
     ]
 });
+
+orderSchema.index({ user_id: 1, order_date: -1 });
 
 module.exports = mongoose.model("Order", orderSchema);

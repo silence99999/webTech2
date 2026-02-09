@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Login</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="page">
+  <section class="hero animate">
+    <h1>Welcome back</h1>
+    <p>Sign in to manage products, place orders, and track analytics in one sleek workspace.</p>
+  </section>
+
+  <div class="container narrow animate">
+    <div class="card-header">
+      <div>
+        <h2 class="title">Login</h2>
+        <p class="subtitle">Use your account credentials to continue.</p>
+      </div>
+      <span class="tag">Secure</span>
+    </div>
+
+    <div class="form">
+      <div class="field">
+        <label for="email">Email</label>
+        <input id="email" type="email" placeholder="you@company.com">
+      </div>
+      <div class="field">
+        <label for="password">Password</label>
+        <input id="password" type="password" placeholder="••••••••">
+      </div>
+      <button onclick="login()">Login</button>
+    </div>
+
+    <p id="msg"></p>
+
+    <p class="footer-link">
+      <a href="reset-password.html">Forgot password?</a>
+    </p>
+
+    <p class="footer-link">
+      No account?
+      <a href="register.html">Register</a>
+    </p>
+  </div>
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>

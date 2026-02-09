@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Orders</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<script>
+  if (!localStorage.getItem("token")) {
+    window.location.href = "index.html";
+  }
+</script>
+
+<div class="page">
+  <section class="hero animate">
+    <h1>Order Insights</h1>
+    <p>Track recent activity, and for admins, surface revenue by product.</p>
+  </section>
+
+  <div class="container animate">
+    <div class="card-header">
+      <div>
+        <h2 class="title">Orders</h2>
+        <p class="subtitle">Review and analyze order history.</p>
+      </div>
+      <nav>
+        <a class="admin-link" href="admin-dashboard.html">Admin Dashboard</a>
+        <a class="admin-link" href="admin-products.html">Admin Products</a>
+        <a class="user-link" href="products.html">Products</a>
+        <a href="orders.html">Orders</a>
+        <a href="#" onclick="logout()">Logout</a>
+      </nav>
+    </div>
+
+    <div class="split">
+      <div class="panel">
+        <div class="card-header">
+          <div>
+            <h3 class="title">Recent Orders</h3>
+            <p class="subtitle">Load the latest order stream.</p>
+          </div>
+        </div>
+        <div class="filters">
+          <div class="row">
+            <div class="field">
+              <label for="order-status">Status</label>
+              <select id="order-status">
+                <option value="">All</option>
+                <option value="pending">Pending</option>
+                <option value="paid">Paid</option>
+                <option value="cancelled">Cancelled</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="order-sort">Sort</label>
+              <select id="order-sort">
+                <option value="order_date-desc">Newest</option>
+                <option value="order_date-asc">Oldest</option>
+                <option value="total_amount-desc">Amount: High to Low</option>
+                <option value="total_amount-asc">Amount: Low to High</option>
+              </select>
+            </div>
+          </div>
+          <div class="row">
+            <div class="field">
+              <label for="order-from">From</label>
+              <input id="order-from" type="date">
+            </div>
+            <div class="field">
+              <label for="order-to">To</label>
+              <input id="order-to" type="date">
+            </div>
+          </div>
+        </div>
+        <ul id="orders"></ul>
+        <div class="pagination" id="orders-pagination"></div>
+      </div>
+
+      <div class="panel" id="admin-analytics">
+        <h3 class="title">Analytics (Admin)</h3>
+        <p class="subtitle">Explore revenue grouped by product.</p>
+        <ul id="analytics"></ul>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+  const token = localStorage.getItem("token");
+
+  if (token) {
+    const payload = JSON.parse(atob(token.split(".")[1]));
+
+    if (payload.role !== "admin") {
+      document.getElementById("admin-analytics").style.display = "none";
+      document.querySelectorAll(".admin-link").forEach(link => link.style.display = "none");
+    } else {
+      document.querySelectorAll(".user-link").forEach(link => link.style.display = "none");
+    }
+  }
+</script>
+
+
+<script src="app.js"></script>
+</body>
+</html>

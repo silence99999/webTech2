@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Products</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<script>
+  if (!localStorage.getItem("token")) {
+    window.location.href = "index.html";
+  }
+</script>
+
+<div class="page">
+  <section class="hero animate">
+    <h1>Online Shop</h1>
+    <p>Browse inventory, curate new items, and place orders in a focused workspace.</p>
+  </section>
+
+  <div class="container animate">
+    <div class="card-header">
+      <div>
+        <h2 class="title">Catalog</h2>
+        <p class="subtitle">Manage and order from your catalog.</p>
+      </div>
+      <nav>
+        <a class="admin-link" href="admin-dashboard.html">Admin Dashboard</a>
+        <a class="admin-link" href="admin-products.html">Admin Products</a>
+        <a class="user-link" href="products.html">Catalog</a>
+        <a href="orders.html">Orders</a>
+        <a href="#" onclick="logout()">Logout</a>
+      </nav>
+    </div>
+
+    <div class="split" id="products-split">
+      <div class="panel">
+        <div class="card-header">
+          <div>
+            <h3 class="title">Products</h3>
+            <p class="subtitle">Browse and select items to order.</p>
+          </div>
+        </div>
+
+        <div class="filters">
+          <div class="field">
+            <label for="product-search">Search</label>
+            <input id="product-search" placeholder="Search by name">
+          </div>
+          <div class="row">
+            <div class="field">
+              <label for="product-category">Category</label>
+              <input id="product-category" placeholder="Category">
+            </div>
+            <div class="field">
+              <label for="product-brand">Brand</label>
+              <input id="product-brand" placeholder="Brand">
+            </div>
+          </div>
+          <div class="row">
+            <div class="field">
+              <label for="product-sort">Sort</label>
+              <select id="product-sort">
+                <option value="createdAt-desc">Newest</option>
+                <option value="price-asc">Price: Low to High</option>
+                <option value="price-desc">Price: High to Low</option>
+                <option value="name-asc">Name: A-Z</option>
+                <option value="name-desc">Name: Z-A</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="product-instock">Stock</label>
+              <select id="product-instock">
+                <option value="1">In stock</option>
+                <option value="">All</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <ul id="products"></ul>
+        <div class="pagination" id="products-pagination"></div>
+        <button id="place-order-btn" onclick="placeOrder()">Place Order</button>
+      </div>
+
+      <div class="panel" id="admin-panel">
+        <h3 class="title">Add Product (Admin)</h3>
+        <p class="subtitle">Create a new item with pricing and stock.</p>
+
+        <div class="form">
+          <div class="field">
+            <label for="name">Name</label>
+            <input id="name" placeholder="Midnight Blend Coffee">
+          </div>
+          <div class="row">
+            <div class="field">
+              <label for="category">Category</label>
+              <input id="category" placeholder="Beverages">
+            </div>
+            <div class="field">
+              <label for="brand">Brand</label>
+              <input id="brand" placeholder="Aether Supply">
+            </div>
+          </div>
+          <div class="row">
+            <div class="field">
+              <label for="price">Price</label>
+              <input id="price" type="number" placeholder="14.50">
+            </div>
+            <div class="field">
+              <label for="stock">Stock</label>
+              <input id="stock" type="number" placeholder="120">
+            </div>
+          </div>
+          <button onclick="createProduct()">Create Product</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+  const token = localStorage.getItem("token");
+
+  if (token) {
+    const payload = JSON.parse(atob(token.split(".")[1]));
+
+    if (payload.role !== "admin") {
+      document.getElementById("admin-panel").style.display = "none";
+      document.getElementById("products-split").classList.add("single");
+      document.querySelectorAll(".admin-link").forEach(link => link.style.display = "none");
+    } else {
+      document.querySelectorAll(".user-link").forEach(link => link.style.display = "none");
+    }
+  }
+
+  const payload = JSON.parse(atob(token.split(".")[1]));
+
+  if (payload.role === "admin") {
+    document.getElementById("place-order-btn").style.display = "none";
+  }
+</script>
+
+
+
+<script src="app.js"></script>
+</body>
+</html>
